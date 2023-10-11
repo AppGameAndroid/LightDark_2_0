@@ -6,7 +6,6 @@ public class PlayerMoveState : IState
     protected PlayerMovementSTM stateMachine;
     
     protected PlayerGroundedData movementData;
-    
 
     #region  IState Method
     public PlayerMoveState (PlayerMovementSTM playerMovementstateMachine)
@@ -15,7 +14,6 @@ public class PlayerMoveState : IState
         movementData = stateMachine.Player.pData.GroundedData;
 
         InitializeData();
-
     }
 
     private void InitializeData()
@@ -33,11 +31,9 @@ public class PlayerMoveState : IState
         AddInputActionCallBacks();
     }
 
-  
-
     public virtual void Exit()
     {
-     
+        RemoveInputActionCallBacks();
     }
 
     public virtual void HandleInput()
@@ -77,7 +73,7 @@ public class PlayerMoveState : IState
 
         float movementSpeed = GetMovementSpeed();
 
-        Vector3 currentPlayerHorizontalVelocity = GetPlayerCurrentHorizontalVelocity();
+        Vector3 currentPlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
         stateMachine.Player.Rigidbody.AddForce(targetRotationDirection * movementSpeed- currentPlayerHorizontalVelocity, ForceMode.VelocityChange);
     }
 
@@ -131,10 +127,10 @@ public class PlayerMoveState : IState
 
     protected float GetMovementSpeed()
     {
-        return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModify;
+        return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModify * stateMachine.ReusableData.MovementOnSlopeSpeedModify;
     }
 
-    protected Vector3 GetPlayerCurrentHorizontalVelocity()
+    protected Vector3 GetPlayerHorizontalVelocity()
     {
         Vector3 playerHorizontalVelocity = stateMachine.Player.Rigidbody.velocity;
         playerHorizontalVelocity.y= 0f;
@@ -142,6 +138,10 @@ public class PlayerMoveState : IState
         return playerHorizontalVelocity;
     }
 
+    protected Vector3 GetPlayerVerticalVelocity() 
+    {
+        return new Vector3(0f, stateMachine.Player.Rigidbody.velocity.y, 0f);
+    }
     protected void RotateTowardsTargetDirection()
     {
         float currentYAngle = stateMachine.Player.Rigidbody.rotation.eulerAngles.y;

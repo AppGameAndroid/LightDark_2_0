@@ -138,10 +138,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 8e8c9a010cb6b734a88326072520bc59, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.2
-  m_Height: 1.38
+  m_Radius: 0.15
+  m_Height: 1.035
   m_Direction: 1
-  m_Center: {x: 0, y: 0.70143926, z: -0.00072956085}
+  m_Center: {x: 0, y: 0.8625, z: 0}
 --- !u!54 &107209086
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -171,6 +171,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <pData>k__BackingField: {fileID: 11400000, guid: f18afa54b664d8740a2ebd3ce34ec144, type: 2}
+  <ColliderUtility>k__BackingField:
+    <defaultColliderData>k__BackingField:
+      <Height>k__BackingField: 1.38
+      <CenterY>k__BackingField: 0.69
+      <Radius>k__BackingField: 0.15
+    <slopeData>k__BackingField:
+      <StepHeightPercentage>k__BackingField: 0.25
+      <FloatRayDistance>k__BackingField: 2
+      <StepReachForce>k__BackingField: 25
+  <LayerData>k__BackingField:
+    <GroundLayer>k__BackingField:
+      serializedVersion: 2
+      m_Bits: 64
 --- !u!114 &107209088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,7 +628,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30122
+  m_Name: pb_Mesh30156
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

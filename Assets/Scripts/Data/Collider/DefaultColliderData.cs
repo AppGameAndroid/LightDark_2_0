@@ -1,18 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefaultColliderData : MonoBehaviour
+[Serializable]
+public class DefaultColliderData 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [field: SerializeField] public float Height {  get; private set; } = 1.38f;
+    [field: SerializeField] public float CenterY {  get; private set; } = 0.69f;
+    [field: SerializeField] public float Radius {  get; private set; } = 0.15f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

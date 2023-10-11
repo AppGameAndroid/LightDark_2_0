@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CapsuleColliderData : MonoBehaviour
+public class CapsuleColliderData
 {
-    // Start is called before the first frame update
-    void Start()
+    public CapsuleCollider Collider {  get; private set; }
+    public Vector3 ColliderCenterInLocalSpace { get; private set; }
+
+    public void Initialize(GameObject gameObject)
     {
-        
+        if (Collider != null)
+        {
+            return;
+        }
+
+        Collider = gameObject.GetComponent<CapsuleCollider>();
+        UpdateColliderData();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateColliderData()
     {
-        
+        ColliderCenterInLocalSpace = Collider.center;
     }
 }

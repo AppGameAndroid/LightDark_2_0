@@ -7,7 +7,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [field:Header("Refencias")]
-    [field:SerializeField] public PlayerSO pData {get; private set;} 
+    [field:SerializeField] public PlayerSO pData {get; private set;}
+
+    [field: Header("Collisions")]
+    [field: SerializeField] public CapsuleColliderUtility ColliderUtility { get; private set;}
+    [field: SerializeField] public PlayerLayerData LayerData { get; private set;}   
+
     public Rigidbody Rigidbody { get; private set;}
 
     public PlayerInput Input { get; private set; }
@@ -18,6 +23,10 @@ public class Player : MonoBehaviour
     {
         Rigidbody = GetComponent<Rigidbody>();
         Input = GetComponent<PlayerInput>();
+
+        ColliderUtility.Initialize(gameObject);
+        ColliderUtility.CalculateCapsuleColliderDimentions();
+
         MainCamaraTransform = Camera.main.transform;
         MovementSTM = new PlayerMovementSTM(this); 
     }
@@ -27,6 +36,12 @@ public class Player : MonoBehaviour
         Input = GetComponent<PlayerInput>();
         MovementSTM.ChangeState(MovementSTM.idleState);
         
+    }
+
+    private void OnValidate()
+    {
+        ColliderUtility.Initialize(gameObject);
+        ColliderUtility.CalculateCapsuleColliderDimentions();
     }
 
     private void Update()
