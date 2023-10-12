@@ -40,16 +40,30 @@ public class PlayerMoveState : IState
     {
         ReadMovementInput();
     }
+   
+    public virtual void Update()
+    {
+        
+    }
     public virtual void PhysicsUpdates()
     {
         Move();
     }
 
-    public virtual void Update()
+    public virtual void OnAnimationEnterEvent()
     {
         
     }
-   
+
+    public virtual void OnAnimationExitEvent()
+    {
+        
+    }
+
+    public virtual void OnAnimationTransitionEvent()
+    {
+        
+    }
     #endregion
 
     #region  Main Method
@@ -60,7 +74,7 @@ public class PlayerMoveState : IState
 
     private void Move()
     {
-        if (stateMachine.ReusableData.MovementInput == Vector2.zero || stateMachine.ReusableData.MovementSpeedModify == 0f)
+        if (stateMachine.ReusableData.MovementInput == Vector2.zero || stateMachine.ReusableData.MovementSpeedModifier == 0f)
         {
             return;
         }
@@ -127,7 +141,7 @@ public class PlayerMoveState : IState
 
     protected float GetMovementSpeed()
     {
-        return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModify * stateMachine.ReusableData.MovementOnSlopeSpeedModify;
+        return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier * stateMachine.ReusableData.MovementOnSlopeSpeedModify;
     }
 
     protected Vector3 GetPlayerHorizontalVelocity()
@@ -210,6 +224,8 @@ public class PlayerMoveState : IState
         stateMachine.ReusableData.ShouldWalk = !stateMachine.ReusableData.ShouldWalk;
         // cada vez que agregamos un callback nesecitamos eliminarla
     }
+
+
 
     #endregion
 }

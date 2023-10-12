@@ -10,4 +10,10 @@ public interface IState
 
     public void Update();
     public void PhysicsUpdates();
+
+    public void OnAnimationEnterEvent();
+    // puede hacer hacer uso 
+
+    public void OnAnimationExitEvent();
+    public void OnAnimationTransitionEvent();
 }

@@ -12,7 +12,7 @@ public class PlayerIdleState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        stateMachine.ReusableData.MovementSpeedModify = 0;
+        stateMachine.ReusableData.MovementSpeedModifier = 0;
         ResetVelocity(); 
     }
 

@@ -14,7 +14,7 @@ public class PlayerRunningState : PlayerMomentState
     public override void Enter()
     {
         base.Enter();
-        stateMachine.ReusableData.MovementSpeedModify = movementData.RunData.runSpeed;
+        stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.runSpeed;
     }
     #endregion
 

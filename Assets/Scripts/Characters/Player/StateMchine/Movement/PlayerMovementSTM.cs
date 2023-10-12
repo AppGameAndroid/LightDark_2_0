@@ -10,6 +10,7 @@ public class PlayerMovementSTM : StateMachine
     public PlayerStateReusableData ReusableData { get;}
     public PlayerIdleState idleState { get; }
     public PlayerWalkingState walkState { get; }
+    public PlayerDashState dashState { get; }
     public PlayerRunningState runningState { get; }
     public PlayerSprintState sprintState { get; }
 
@@ -17,6 +18,7 @@ public class PlayerMovementSTM : StateMachine
     {
         Player = player;
         ReusableData = new PlayerStateReusableData();
+        dashState = new PlayerDashState(this);
         idleState = new PlayerIdleState(this);
         walkState = new PlayerWalkingState(this);
         runningState = new PlayerRunningState(this);
