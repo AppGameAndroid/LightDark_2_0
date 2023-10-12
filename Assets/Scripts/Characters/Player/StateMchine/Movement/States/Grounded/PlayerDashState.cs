@@ -12,7 +12,7 @@ public class PlayerDashState : PlayerGroundedState
 
     public PlayerDashState(PlayerMovementSTM playerMovementstateMachine) : base(playerMovementstateMachine)
     {
-        dashData = movementData.dashData;
+        dashData = movementData.DashData;
     }
 
     #region IState Methods 
@@ -20,7 +20,7 @@ public class PlayerDashState : PlayerGroundedState
     {
         base.Enter();
         
-        stateMachine.ReusableData.MovementSpeedModifier = movementData.dashData.SpeeedModifier;
+        stateMachine.ReusableData.MovementSpeedModifier = movementData.DashData.SpeeedModifier;
         
         AddForceOnTransitionaryState();
         UpdateConsecutiveDashes();
