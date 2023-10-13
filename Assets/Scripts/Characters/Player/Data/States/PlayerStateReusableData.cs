@@ -6,6 +6,7 @@ public class PlayerStateReusableData
     public float MovementSpeedModifier { get; set; } = 1f;
     public float MovementOnSlopeSpeedModify { get; set; } = 1f;
     public float MovemntDesacelerationForce { get; set; } = 1f;
+    public PlayerRotationData RotationData { get; set; }
 
     public bool ShouldWalk { get; set; }
 
@@ -44,4 +45,6 @@ public class PlayerStateReusableData
             return ref dampedTargetRotatioPassedTime;
         }
     }
+
+    
 }
