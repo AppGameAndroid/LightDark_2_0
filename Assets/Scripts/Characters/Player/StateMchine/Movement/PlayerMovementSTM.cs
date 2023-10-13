@@ -13,15 +13,26 @@ public class PlayerMovementSTM : StateMachine
     public PlayerDashState dashState { get; }
     public PlayerRunningState runningState { get; }
     public PlayerSprintState sprintState { get; }
+    public PlayerLightStoppingState lightStoppingState { get; }
+    public PlayerMidStoppingState midStoppingState { get; }
+    public PlayerHardStoppingState hardStoppingState { get; }
 
     public PlayerMovementSTM(Player player)
     {
         Player = player;
         ReusableData = new PlayerStateReusableData();
+        
         dashState = new PlayerDashState(this);
+        
         idleState = new PlayerIdleState(this);
+
         walkState = new PlayerWalkingState(this);
         runningState = new PlayerRunningState(this);
         sprintState = new PlayerSprintState(this);
+
+        lightStoppingState = new PlayerLightStoppingState(this);
+        midStoppingState = new PlayerMidStoppingState(this);
+        hardStoppingState = new PlayerHardStoppingState(this);  
+
     }
 }

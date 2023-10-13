@@ -30,10 +30,9 @@ public class PlayerDashState : PlayerGroundedState
 
     public override void OnAnimationTransitionEvent()
     {
-        base.OnAnimationTransitionEvent();
         if (stateMachine.ReusableData.MovementInput == Vector2.zero)
         {
-            stateMachine.ChangeState(stateMachine.idleState);
+            stateMachine.ChangeState(stateMachine.hardStoppingState);
             return;
         }
         stateMachine.ChangeState(stateMachine.sprintState);

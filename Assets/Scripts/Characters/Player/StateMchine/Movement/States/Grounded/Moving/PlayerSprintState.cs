@@ -78,5 +78,10 @@ public class PlayerSprintState : PlayerMomentState
     {
         keepSprinting = true;
     }
+
+    protected override void OnMomementCanceled(InputAction.CallbackContext context)
+    {
+        stateMachine.ChangeState(stateMachine.hardStoppingState);
+    }
     #endregion
 }

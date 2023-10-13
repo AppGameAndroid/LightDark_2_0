@@ -24,5 +24,10 @@ public class PlayerWalkingState : PlayerMomentState
         base.OnWalkToggleStarted(context);
         stateMachine.ChangeState(stateMachine.runningState);
     }
+
+    protected override void OnMomementCanceled(InputAction.CallbackContext context)
+    {
+        stateMachine.ChangeState(stateMachine.lightStoppingState);
+    }
     #endregion
 }
