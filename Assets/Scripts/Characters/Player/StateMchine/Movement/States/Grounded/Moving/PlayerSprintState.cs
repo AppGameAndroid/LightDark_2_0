@@ -9,6 +9,7 @@ public class PlayerSprintState : PlayerMomentState
     private PlayerSpringData springData;
     private float starTime;
     private bool keepSprinting;
+    private bool shouldResetSpring;
     
    public PlayerSprintState(PlayerMovementSTM playerMovementstateMachine) : base(playerMovementstateMachine)
     {
@@ -18,9 +19,12 @@ public class PlayerSprintState : PlayerMomentState
     #region IState
     public override void Enter()
     {
-        base.Enter();
-
         stateMachine.ReusableData.MovementSpeedModifier = springData.SpeedModifier;
+        base.Enter();
+        stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.StrongForce;
+
+        shouldResetSpring = true; 
+
         starTime = Time.time;
     }
 
@@ -43,6 +47,12 @@ public class PlayerSprintState : PlayerMomentState
     {
         base.Exit();
         keepSprinting = false;
+        if (shouldResetSpring)
+        {
+            keepSprinting =true;
+            stateMachine.ReusableData.ShouldSpring = false; 
+        }
+
     }
     #endregion
 
@@ -62,7 +72,6 @@ public class PlayerSprintState : PlayerMomentState
     #region Reusable Methods
     protected override void AddInputActionCallBacks()
     {
-        base.AddInputActionCallBacks();
         stateMachine.Player.Input.PlayerActions.Sprint.performed += OnsprintPerformance;
     }
 
@@ -77,11 +86,19 @@ public class PlayerSprintState : PlayerMomentState
     private void OnsprintPerformance(InputAction.CallbackContext context)
     {
         keepSprinting = true;
+        stateMachine.ReusableData.ShouldSpring = true;
     }
 
-    protected override void OnMomementCanceled(InputAction.CallbackContext context)
+    protected override void OnMovementCanceled(InputAction.CallbackContext context)
     {
         stateMachine.ChangeState(stateMachine.hardStoppingState);
+        
+    }
+
+    protected override void OnJumpStarted(InputAction.CallbackContext context)
+    {
+        shouldResetSpring = false;
+        
     }
     #endregion
 }

@@ -12,7 +12,9 @@ public class PlayerIdleState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        stateMachine.ReusableData.MovementSpeedModifier = 0;
+        stateMachine.ReusableData.MovementSpeedModifier = 0f;
+        
+        stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.StationayForce;
         ResetVelocity(); 
     }
 
@@ -24,6 +26,16 @@ public class PlayerIdleState : PlayerGroundedState
             return;
         }
         OnMove();
+    }
+
+    public override void PhysicsUpdates()
+    {
+        base.PhysicsUpdates();
+        if (!IsMovingHorizontaly())
+        {
+            return;
+        }
+        ResetVelocity();
     }
 
     #endregion

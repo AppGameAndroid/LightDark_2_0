@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class CapsuleColliderUtility
 {
-    public CapsuleColliderData capsuleColliderData { get; private set; }
+    [field: SerializeField] public CapsuleColliderData capsuleColliderData { get; private set; }
     [field: SerializeField] public DefaultColliderData defaultColliderData { get; private set; }
     [field: SerializeField] public SlopeData  slopeData { get; private set; }
  
@@ -37,14 +37,6 @@ public class CapsuleColliderUtility
         capsuleColliderData.UpdateColliderData();
     }
 
-    public void RecalculateCapsulecolliderCenter()
-    {
-        float colliderHeightDifference = defaultColliderData.Height - capsuleColliderData.Collider.height;
-        Vector3 newColliderCenter = new Vector3(0f, defaultColliderData.CenterY + (colliderHeightDifference / 2f), 0f);
-
-    capsuleColliderData.Collider.center = newColliderCenter;
-    }
-
     public void SetCapsuleColliderRadius(float radius)
     {
         capsuleColliderData.Collider.radius = radius;
@@ -55,4 +47,11 @@ public class CapsuleColliderUtility
         capsuleColliderData.Collider.height = height;
     }
 
+    public void RecalculateCapsulecolliderCenter()
+    {
+        float colliderHeightDifference = defaultColliderData.Height - capsuleColliderData.Collider.height;
+        Vector3 newColliderCenter = new Vector3(0f, defaultColliderData.CenterY + (colliderHeightDifference / 2f), 0f);
+
+        capsuleColliderData.Collider.center = newColliderCenter;
+    }
 }

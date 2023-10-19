@@ -44,4 +44,9 @@ public abstract class StateMachine
     {
         currentState?.OnAnimationExitEvent();
     }
+
+    public void OnTriggerEnter(Collider collider)
+    {
+        currentState?.OnTriggerEnter(collider);
+    }
 }

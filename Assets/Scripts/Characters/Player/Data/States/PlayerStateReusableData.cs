@@ -5,10 +5,11 @@ public class PlayerStateReusableData
     public Vector2 MovementInput { get; set; }
     public float MovementSpeedModifier { get; set; } = 1f;
     public float MovementOnSlopeSpeedModify { get; set; } = 1f;
-    public float MovemntDesacelerationForce { get; set; } = 1f;
-    public PlayerRotationData RotationData { get; set; }
+    public float MovementDesacelerationForce { get; set; } = 1f;
+    
 
     public bool ShouldWalk { get; set; }
+    public bool ShouldSpring { get; set; }
 
     private Vector3 currentTargetRotation;
     private Vector3 timeToReachTargetRotation;
@@ -46,5 +47,7 @@ public class PlayerStateReusableData
         }
     }
 
-    
+    public Vector3 CurrentJumpForce { get; set; } 
+
+    public PlayerRotationData RotationData { get; set; }
 }

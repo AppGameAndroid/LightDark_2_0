@@ -33,9 +33,14 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        Input = GetComponent<PlayerInput>();
+        
         MovementSTM.ChangeState(MovementSTM.idleState);
         
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        MovementSTM.OnTriggerEnter(collider);
     }
 
     private void OnValidate()

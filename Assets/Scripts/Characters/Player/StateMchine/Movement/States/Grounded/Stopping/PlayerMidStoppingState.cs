@@ -12,7 +12,8 @@ public class PlayerMidStoppingState : PlayerStoppingState
     public override void Enter()
     {
         base.Enter();
-        stateMachine.ReusableData.MovemntDesacelerationForce = movementData.StopData.MidtDecelerationForce;
+        stateMachine.ReusableData.MovementDesacelerationForce = movementData.StopData.MidtDecelerationForce;
+        stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.MediumForce;
     }
     #endregion
 }

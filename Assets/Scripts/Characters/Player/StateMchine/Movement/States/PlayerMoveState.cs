@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,28 +8,25 @@ public class PlayerMoveState : IState
 
     protected PlayerGroundedData movementData;
 
+    protected PlayerAirboneData airboneData;
+
     #region  IState Method
     public PlayerMoveState(PlayerMovementSTM playerMovementstateMachine)
     {
         stateMachine = playerMovementstateMachine;
         movementData = stateMachine.Player.pData.GroundedData;
-
+        airboneData = stateMachine.Player.pData.airboneData;
         InitializeData();
     }
 
-    private void InitializeData()
-    {
-        SetBaseRotationData();
-    }
-
-  
+   
 
     public virtual void Enter()
     {
         Debug.Log("State: " + GetType().Name);
         //Para conocer el estado actual del jugador 
-        Debug.Log(stateMachine.ReusableData.ShouldWalk);
-        //Para conocer el estado actual del jugador 
+        
+     
 
         AddInputActionCallBacks();
     }
@@ -66,6 +64,19 @@ public class PlayerMoveState : IState
     {
 
     }
+    public virtual void OnTriggerEnter(Collider collider)
+    {
+        if (stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+        {
+            OnContactWithGround(collider);
+            return;
+        }
+    }
+
+    private void InitializeData()
+    {
+        SetBaseRotationData();
+    }
     #endregion
 
     #region  Main Method
@@ -90,6 +101,7 @@ public class PlayerMoveState : IState
         float movementSpeed = GetMovementSpeed();
 
         Vector3 currentPlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
+
         stateMachine.Player.Rigidbody.AddForce(targetRotationDirection * movementSpeed - currentPlayerHorizontalVelocity, ForceMode.VelocityChange);
     }
 
@@ -136,6 +148,8 @@ public class PlayerMoveState : IState
     #endregion
 
     #region Reusable Area
+
+    
 
     protected void SetBaseRotationData()
     {
@@ -210,32 +224,56 @@ public class PlayerMoveState : IState
     protected void ResetVelocity()
     {
         stateMachine.Player.Rigidbody.velocity = Vector3.zero;
+        Debug.Log("la velocidad a sido reseteada");
     }
 
     protected virtual void AddInputActionCallBacks()
     {
         stateMachine.Player.Input.PlayerActions.WalkToggle.started += OnWalkToggleStarted;
+        
     }
-
-
 
     protected virtual void RemoveInputActionCallBacks()
     {
         stateMachine.Player.Input.PlayerActions.WalkToggle.started -= OnWalkToggleStarted;
+        
     }
 
-    protected void DecelerationOnHorizontal()
+    protected void DesacelerationOnHorizontal()
     {
         Vector3 PlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
-        stateMachine.Player.Rigidbody.AddForce(-PlayerHorizontalVelocity * stateMachine.ReusableData.MovemntDesacelerationForce, ForceMode.Acceleration);
+        stateMachine.Player.Rigidbody.AddForce(-PlayerHorizontalVelocity * stateMachine.ReusableData.MovementDesacelerationForce, ForceMode.Acceleration);
+    }
+    
+    protected void DesacelerationOnVertical()
+    {
+        Vector3 PlayerVerticalVelocity = GetPlayerVerticalVelocity();
+        stateMachine.Player.Rigidbody.AddForce(-PlayerVerticalVelocity * stateMachine.ReusableData.MovementDesacelerationForce, ForceMode.Acceleration);
     }
 
-    protected bool IsMovingHorizontaly(float minimunMagnitud = 0.17f)
+    protected bool IsMovingHorizontaly(float minimunMagnitud = 0.1f)
     {
         Vector3 PlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
 
-        Vector2 playerHorizontalMoment = new Vector2(PlayerHorizontalVelocity.x, PlayerHorizontalVelocity.y);
+        Vector2 playerHorizontalMoment = new Vector2(PlayerHorizontalVelocity.x, PlayerHorizontalVelocity.z);
         return playerHorizontalMoment.magnitude > minimunMagnitud;
+    }
+
+    protected bool isMovingUp(float minimumMagnitud = 0.1f)
+    {
+        
+        return  GetPlayerVerticalVelocity().y > minimumMagnitud;
+    }
+
+    protected bool isMovingDown(float minimumMagnitud = 0.1f)
+    {
+
+        return GetPlayerVerticalVelocity().y < -minimumMagnitud;
+    }
+
+    protected virtual void OnContactWithGround(Collider collider)
+    {
+
     }
     #endregion
 
@@ -244,6 +282,9 @@ public class PlayerMoveState : IState
     {
         stateMachine.ReusableData.ShouldWalk = !stateMachine.ReusableData.ShouldWalk;
         // cada vez que agregamos un callback nesecitamos eliminarla
+        Debug.Log("OnWalkToggle activado PlaYerMoveState ");
     }
+
+    
     #endregion
 }

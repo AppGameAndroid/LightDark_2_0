@@ -20,16 +20,17 @@ public class PlayerDashState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        
         stateMachine.ReusableData.MovementSpeedModifier = movementData.DashData.SpeeedModifier;
-
-        stateMachine.ReusableData.RotationData = dashData.RotationData;
         
+        
+        stateMachine.ReusableData.RotationData = dashData.RotationData;
+        stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.StrongForce;
         AddForceOnTransitionaryState();
 
         ShouldKeepRotatin = stateMachine.ReusableData.MovementInput != Vector2.zero;
         
         UpdateConsecutiveDashes();
+        
         startTime = Time.time;
     }
 
@@ -100,7 +101,7 @@ public class PlayerDashState : PlayerGroundedState
 
     #region Reusable Methods 
 
-    protected override void AddInputActionCallBacks()
+     protected override void AddInputActionCallBacks()
     {
         base.AddInputActionCallBacks();
         stateMachine.Player.Input.PlayerActions.Movement.performed += OnMovementPerformanceRotation;
@@ -122,10 +123,6 @@ public class PlayerDashState : PlayerGroundedState
         ShouldKeepRotatin = true; 
     }
 
-    protected override void OnMomementCanceled(InputAction.CallbackContext context)
-    {
-        
-    }
     protected override void OnDashStarted(InputAction.CallbackContext context)
     {
        

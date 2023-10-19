@@ -15,7 +15,7 @@ public class PlayerStoppingState : PlayerGroundedState
     {
         base.Enter();
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
-
+        
     }
 
     public override void PhysicsUpdates()
@@ -28,7 +28,7 @@ public class PlayerStoppingState : PlayerGroundedState
         {
             return;
         }
-        DecelerationOnHorizontal();
+        DesacelerationOnHorizontal();
     }
 
     public override void OnAnimationTransitionEvent()
@@ -53,8 +53,9 @@ public class PlayerStoppingState : PlayerGroundedState
     #endregion
 
     #region Input Methods
-    protected override void OnMomementCanceled(InputAction.CallbackContext context)
+    protected override void OnMovementCanceled(InputAction.CallbackContext context)
     {
+        // go to Idle 
     }
     private void OnmovementStared(InputAction.CallbackContext context)
     {
