@@ -8,7 +8,7 @@ using UnityEngine;
 public class CamaraZoom : MonoBehaviour
 {
     [SerializeField][Range(0f,10f)] private float defaultDistance = 6f; 
-    [SerializeField][Range(0f, 10f)] private float minDistance = 6f; 
+    [SerializeField][Range(0f, 10f)] private float minDistance = 2f; 
     [SerializeField][Range(0f, 10f)]private float maxDistance = 6f;
     
     [SerializeField][Range(0f, 10f)] private float smothing = 4f; 
@@ -23,6 +23,7 @@ public class CamaraZoom : MonoBehaviour
     {
         framingTransposer = GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineFramingTransposer>();
         inputProvider= GetComponent<CinemachineInputProvider>();
+        currentTargetDistance = defaultDistance;
     }
 
     private void Update()
