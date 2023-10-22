@@ -37,7 +37,6 @@ public class PlayerIdleState : PlayerGroundedState
         }
         ResetVelocity();
     }
-
     #endregion
 
 }

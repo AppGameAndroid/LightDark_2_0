@@ -5,6 +5,7 @@ public class PlayerJumpState : PlayerAirbondState
 {
     private bool shouldKeepRotating; 
     private PlayerJumpData jumpData;
+    private bool canStartFalling; 
     public PlayerJumpState(PlayerMovementSTM playerMovementstateMachine) : base(playerMovementstateMachine)
     {
         jumpData = airboneData.JumpData;
@@ -26,6 +27,22 @@ public class PlayerJumpState : PlayerAirbondState
         Jump();
     }
 
+    public override void Update()
+    {
+        base.Update();
+        if (!canStartFalling && isMovingUp(0f))
+        {
+            canStartFalling=true;
+        }
+
+        if (!canStartFalling || GetPlayerVerticalVelocity().y > 0 )
+        {
+            return;
+        }
+
+        stateMachine.ChangeState(stateMachine.fallingState);
+    }
+
     public override void PhysicsUpdates()
     {
         base.PhysicsUpdates();
@@ -45,6 +62,7 @@ public class PlayerJumpState : PlayerAirbondState
         
         base.Exit();
         SetBaseRotationData();
+        canStartFalling = false;
 
     }
     #endregion

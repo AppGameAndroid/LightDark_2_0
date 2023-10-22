@@ -6,14 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
-    [field:Header("Refencias")]
-    [field:SerializeField] public PlayerSO pData {get; private set;}
+    [field: Header("Refencias")]
+    [field: SerializeField] public PlayerSO pData { get; private set; }
 
     [field: Header("Collisions")]
-    [field: SerializeField] public CapsuleColliderUtility ColliderUtility { get; private set;}
-    [field: SerializeField] public PlayerLayerData LayerData { get; private set;}   
+    [field: SerializeField] public PlayerCapsuleColliderUtility ColliderUtility { get; private set; }
+    [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
 
-    public Rigidbody Rigidbody { get; private set;}
+    public Rigidbody Rigidbody { get; private set; }
 
     public PlayerInput Input { get; private set; }
     public Transform MainCamaraTransform { get; private set; }
@@ -28,19 +28,24 @@ public class Player : MonoBehaviour
         ColliderUtility.CalculateCapsuleColliderDimentions();
 
         MainCamaraTransform = Camera.main.transform;
-        MovementSTM = new PlayerMovementSTM(this); 
+        MovementSTM = new PlayerMovementSTM(this);
     }
 
     private void Start()
     {
-        
+
         MovementSTM.ChangeState(MovementSTM.idleState);
-        
+
     }
 
     private void OnTriggerEnter(Collider collider)
     {
         MovementSTM.OnTriggerEnter(collider);
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        MovementSTM.OnTriggerExit(collider);
     }
 
     private void OnValidate()

@@ -20,7 +20,7 @@ public class PlayerAirbondState : PlayerMoveState
 
     protected override void OnContactWithGround(Collider collider)
     {
-        stateMachine.ChangeState(stateMachine.idleState);
+        stateMachine.ChangeState(stateMachine.lightLandingState);
     }
 
     protected virtual void ResetSpringState()

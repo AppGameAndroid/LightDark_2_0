@@ -16,7 +16,7 @@ public class PlayerGroundedState : PlayerMoveState
     {
         base.Enter();
         UpdateShouldspringState();
-        
+
     }
 
     public override void PhysicsUpdates()
@@ -42,9 +42,9 @@ public class PlayerGroundedState : PlayerMoveState
             {
                 return;
             }
-            
-            float distanceToFloatingPoint = stateMachine.Player.ColliderUtility.capsuleColliderData.ColliderCenterInLocalSpace.y *stateMachine.Player.transform.localScale.y - hit.distance;
-            if (distanceToFloatingPoint == 0f) 
+
+            float distanceToFloatingPoint = stateMachine.Player.ColliderUtility.capsuleColliderData.ColliderCenterInLocalSpace.y * stateMachine.Player.transform.localScale.y - hit.distance;
+            if (distanceToFloatingPoint == 0f)
             {
                 return;
             }
@@ -52,18 +52,29 @@ public class PlayerGroundedState : PlayerMoveState
             float amountToLift = distanceToFloatingPoint * slopeData.StepReachForce - GetPlayerVerticalVelocity().y;
 
             // Registros de depuraci�n
-            
 
-            Vector3 liftForce = new Vector3 (0f, amountToLift, 0f);
+
+            Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
             stateMachine.Player.Rigidbody.AddForce(liftForce, ForceMode.VelocityChange);
             // Registro de depuraci�n despu�s de aplicar la fuerza
-            
+
         }
+    }
+
+    private bool isGroundUnderneath()
+    {
+        BoxCollider groundCheckCollider = stateMachine.Player.ColliderUtility.TriggerData.GroundCheckerCollider;
+
+        Vector3 groundColliderCenterInWorldSpace = groundCheckCollider.bounds.center;
+
+        Collider[] overlapGroundCollider = Physics.OverlapBox(groundColliderCenterInWorldSpace, groundCheckCollider.bounds.extents, groundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer,QueryTriggerInteraction.Ignore);
+
+        return overlapGroundCollider.Length > 0;
     }
 
     private float SetSloopSpeepModifierOnAnlge(float Angle)
     {
-        float slopeSpeedModifier = movementData.SloopeSpeedAngle.Evaluate (Angle);
+        float slopeSpeedModifier = movementData.SloopeSpeedAngle.Evaluate(Angle);
         stateMachine.ReusableData.MovementOnSlopeSpeedModify = slopeSpeedModifier;
         return slopeSpeedModifier;
     }
@@ -94,7 +105,7 @@ public class PlayerGroundedState : PlayerMoveState
         stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
     }
 
-  
+
 
     protected override void RemoveInputActionCallBacks()
     {
@@ -102,8 +113,8 @@ public class PlayerGroundedState : PlayerMoveState
         stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
         stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
         stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
-        
-        
+
+
     }
 
     protected virtual void OnMove()
@@ -123,7 +134,7 @@ public class PlayerGroundedState : PlayerMoveState
 
     #region InputRegion
 
-    
+
 
     protected virtual void OnDashStarted(InputAction.CallbackContext context)
     {
@@ -136,10 +147,33 @@ public class PlayerGroundedState : PlayerMoveState
         Debug.Log("Velocidad en Y antes de la fuerza de elevaci�n: " + stateMachine.Player.Rigidbody.velocity.y);
     }
 
-    protected virtual void OnMovementCanceled(InputAction.CallbackContext context) 
-    { 
-    
+    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+    {
+
     }
 
+    protected override void OnContactWithGroundExited(Collider collider)
+    {
+        base.OnContactWithGroundExited(collider);
+
+        if (isGroundUnderneath())
+        {
+            return;
+        }
+        Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.capsuleColliderData.Collider.bounds.center;
+        
+        Ray downWardsRayFromCapsuleBottom = new Ray(capsuleColliderCenterInWorldSpace - stateMachine.Player.ColliderUtility.capsuleColliderData.colliderVerticalExtents, Vector3.down);
+
+        if (!Physics.Raycast(downWardsRayFromCapsuleBottom,out _, movementData.GroundToFallRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
+        {
+            OnFall();
+        }
+        
+    }
+
+    protected virtual void OnFall()
+    {
+        stateMachine.ChangeState(stateMachine.fallingState);
+    }
     #endregion
 }

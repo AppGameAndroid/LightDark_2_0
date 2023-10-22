@@ -79,6 +79,13 @@ public class PlayerSprintState : PlayerMomentState
     {
         stateMachine.Player.Input.PlayerActions.Sprint.performed -= OnsprintPerformance;
     }
+
+    protected override void OnFall()
+    {
+        shouldResetSpring = false;
+
+        base.OnFall();
+    }
     #endregion
 
 

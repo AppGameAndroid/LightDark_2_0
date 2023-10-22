@@ -19,8 +19,6 @@ public class PlayerMoveState : IState
         InitializeData();
     }
 
-   
-
     public virtual void Enter()
     {
         Debug.Log("State: " + GetType().Name);
@@ -73,6 +71,15 @@ public class PlayerMoveState : IState
         }
     }
 
+    public void OnTriggerExit(Collider collider)
+    {
+        if (stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+        {
+            OnContactWithGroundExited(collider);
+            return;
+        }
+    }
+    
     private void InitializeData()
     {
         SetBaseRotationData();
@@ -145,6 +152,7 @@ public class PlayerMoveState : IState
 
         return directionAngle;
     }
+
     #endregion
 
     #region Reusable Area
@@ -270,11 +278,13 @@ public class PlayerMoveState : IState
 
         return GetPlayerVerticalVelocity().y < -minimumMagnitud;
     }
-
-    protected virtual void OnContactWithGround(Collider collider)
+    protected Vector3 ResetVerticalVelocity()
     {
-
+        Vector3 playerHorizaontalVelocity = GetPlayerHorizontalVelocity();
+        stateMachine.Player.Rigidbody.velocity = playerHorizaontalVelocity;
+        return playerHorizaontalVelocity;
     }
+
     #endregion
 
     #region Input Methods 
@@ -284,7 +294,14 @@ public class PlayerMoveState : IState
         // cada vez que agregamos un callback nesecitamos eliminarla
         Debug.Log("OnWalkToggle activado PlaYerMoveState ");
     }
+    protected virtual void OnContactWithGround(Collider collider)
+    {
 
-    
+    }
+
+    protected virtual void OnContactWithGroundExited(Collider collider)
+    {
+
+    }
     #endregion
 }
