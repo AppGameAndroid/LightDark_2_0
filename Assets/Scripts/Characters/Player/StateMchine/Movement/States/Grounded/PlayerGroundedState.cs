@@ -16,6 +16,7 @@ public class PlayerGroundedState : PlayerMoveState
     {
         base.Enter();
         UpdateShouldspringState();
+        UpdateCamaraRecenteringState(stateMachine.ReusableData.MovementInput);
 
     }
 
@@ -75,7 +76,15 @@ public class PlayerGroundedState : PlayerMoveState
     private float SetSloopSpeepModifierOnAnlge(float Angle)
     {
         float slopeSpeedModifier = movementData.SloopeSpeedAngle.Evaluate(Angle);
-        stateMachine.ReusableData.MovementOnSlopeSpeedModify = slopeSpeedModifier;
+
+        if (stateMachine.ReusableData.MovementOnSlopeSpeedModify != slopeSpeedModifier)
+        {
+            stateMachine.ReusableData.MovementOnSlopeSpeedModify = slopeSpeedModifier;
+            
+            UpdateCamaraRecenteringState(stateMachine.ReusableData.MovementInput);
+        }
+        
+
         return slopeSpeedModifier;
     }
 
@@ -91,26 +100,22 @@ public class PlayerGroundedState : PlayerMoveState
         }
         stateMachine.ReusableData.ShouldSpring = false;
     }
-
     #endregion
 
     #region Reusable Methods 
-
     protected override void AddInputActionCallBacks()
     {
         base.AddInputActionCallBacks();
 
-        stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
+        
         stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
         stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
     }
 
-
-
     protected override void RemoveInputActionCallBacks()
     {
         base.RemoveInputActionCallBacks();
-        stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
+        
         stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
         stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
 
@@ -147,10 +152,7 @@ public class PlayerGroundedState : PlayerMoveState
         Debug.Log("Velocidad en Y antes de la fuerza de elevaci�n: " + stateMachine.Player.Rigidbody.velocity.y);
     }
 
-    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
-    {
-
-    }
+  
 
     protected override void OnContactWithGroundExited(Collider collider)
     {

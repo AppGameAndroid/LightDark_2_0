@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [field: Header("Collisions")]
     [field: SerializeField] public PlayerCapsuleColliderUtility ColliderUtility { get; private set; }
     [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
+    [field: SerializeField] public PlayerCamaraUtility camaraUtility { get; private set; }
 
     public Rigidbody Rigidbody { get; private set; }
 
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
 
         ColliderUtility.Initialize(gameObject);
         ColliderUtility.CalculateCapsuleColliderDimentions();
+        camaraUtility.Inicialaze();
 
         MainCamaraTransform = Camera.main.transform;
         MovementSTM = new PlayerMovementSTM(this);

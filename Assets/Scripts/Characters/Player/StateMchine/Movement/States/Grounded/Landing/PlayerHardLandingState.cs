@@ -13,9 +13,12 @@ public class PlayerHardLandingState : PlayerLandingState
     #region IState Methods 
     public override void Enter()
     {
-        base.Enter();
-        stateMachine.Player.Input.PlayerActions.Movement.Disable();
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
+        base.Enter();
+
+        stateMachine.Player.Input.PlayerActions.Movement.Disable();
+        
         ResetVelocity();
     }
 

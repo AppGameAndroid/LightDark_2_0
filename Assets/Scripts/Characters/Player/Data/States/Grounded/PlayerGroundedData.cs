@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -9,9 +10,14 @@ public class PlayerGroundedData
     [field: SerializeField] public AnimationCurve SloopeSpeedAngle { get; private set; }
     [field: SerializeField] public PlayerRotationData BaseRotationData { get; private set; }
     [field: SerializeField] public PlayerWalkData WalkData { get; private set; }
+    [field: SerializeField] public PlayerIdleData IdleData { get; private set; }
     [field: SerializeField] public PlayerRunData RunData { get; private set; }
     [field: SerializeField] public PlayerDashData DashData { get; private set; }
     [field: SerializeField] public PlayerSpringData SpringData { get; private set; }
     [field: SerializeField] public PlayerStopData StopData { get; private set; }
     [field: SerializeField] public PlayerRollingData rollingData { get; private set; }
+
+    [field: SerializeField] public List<PlayerCamaraRecenterData> sideWaysCamaraRecenterData { get; private set; }
+    [field: SerializeField] public List<PlayerCamaraRecenterData> backwardsCamaraRecenterData { get; private set; }
+
 }

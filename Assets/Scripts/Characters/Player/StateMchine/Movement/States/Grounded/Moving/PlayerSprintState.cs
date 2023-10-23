@@ -99,7 +99,7 @@ public class PlayerSprintState : PlayerMomentState
     protected override void OnMovementCanceled(InputAction.CallbackContext context)
     {
         stateMachine.ChangeState(stateMachine.hardStoppingState);
-        
+        base.OnMovementCanceled(context);
     }
 
     protected override void OnJumpStarted(InputAction.CallbackContext context)

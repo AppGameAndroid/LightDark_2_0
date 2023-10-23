@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <GroundedData>k__BackingField:
     <BaseSpeed>k__BackingField: 5
+    <GroundToFallRayDistance>k__BackingField: 1
     <SloopeSpeedAngle>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -86,6 +87,21 @@ MonoBehaviour:
       <LightDecelerationForce>k__BackingField: 5
       <MidtDecelerationForce>k__BackingField: 6.5
       <HardtDecelerationForce>k__BackingField: 5
+    <rollingData>k__BackingField: {fileID: 0}
+    <sideWaysCamaraRecenterData>k__BackingField:
+    - <minAngle>k__BackingField: 0
+      <maxAngle>k__BackingField: 80
+      <waitTime>k__BackingField: -1
+      <recenterTime>k__BackingField: -1
+    - <minAngle>k__BackingField: 80
+      <maxAngle>k__BackingField: 90
+      <waitTime>k__BackingField: 0
+      <recenterTime>k__BackingField: 0.3
+    <backwardsCamaraRecenterData>k__BackingField:
+    - <minAngle>k__BackingField: 80
+      <maxAngle>k__BackingField: 90
+      <waitTime>k__BackingField: 0
+      <recenterTime>k__BackingField: 0.5
   <airboneData>k__BackingField:
     <JumpData>k__BackingField:
       <rotationDataJ>k__BackingField:
@@ -189,3 +205,6 @@ MonoBehaviour:
       <MediumForce>k__BackingField: {x: 3.5, y: 5, z: 3.5}
       <StrongForce>k__BackingField: {x: 5, y: 5, z: 5}
       <DesacelerationForce>k__BackingField: 1.1
+    <FallData>k__BackingField:
+      <fallSpeedLimit>k__BackingField: 15
+      <minDistanceHardFall>k__BackingField: 15

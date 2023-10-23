@@ -13,9 +13,9 @@ public class PlayerRollingLandingState : PlayerLandingState
     #region IState Methods 
     public override void Enter()
     {
-        base.Enter();
-
         stateMachine.ReusableData.MovementSpeedModifier = rollingData.speedModifier;
+
+        base.Enter();
 
         stateMachine.ReusableData.ShouldSpring = false;
     }

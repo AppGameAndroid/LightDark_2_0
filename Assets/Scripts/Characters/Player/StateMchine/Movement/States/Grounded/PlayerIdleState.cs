@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerGroundedState
 {
+    private PlayerIdleData idleData;
     public PlayerIdleState(PlayerMovementSTM playerMovementstateMachine) : base(playerMovementstateMachine)
     {
+        idleData = movementData.IdleData;
     }
 
     #region Istate Methods
     public override void Enter()
     {
-        base.Enter();
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
+        stateMachine.ReusableData.backwardsCamaraRecenterData = idleData.backwardsCamaraRecenterData;
+        base.Enter();
+        
         
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.StationayForce;
         ResetVelocity(); 

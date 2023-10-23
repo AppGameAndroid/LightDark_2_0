@@ -13,9 +13,9 @@ public class PlayerStoppingState : PlayerGroundedState
     #region IState Methods
     public override void Enter()
     {
-        base.Enter();
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
-        
+        SetBaseCamaraRecenterData();
+        base.Enter();        
     }
 
     public override void PhysicsUpdates()
@@ -53,10 +53,6 @@ public class PlayerStoppingState : PlayerGroundedState
     #endregion
 
     #region Input Methods
-    protected override void OnMovementCanceled(InputAction.CallbackContext context)
-    {
-        // go to Idle 
-    }
     private void OnmovementStared(InputAction.CallbackContext context)
     {
         OnMove();

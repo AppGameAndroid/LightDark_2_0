@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,8 +17,12 @@ public class PlayerMoveState : IState
         stateMachine = playerMovementstateMachine;
         movementData = stateMachine.Player.pData.GroundedData;
         airboneData = stateMachine.Player.pData.airboneData;
+        SetBaseCamaraRecenterData();
+
         InitializeData();
     }
+
+   
 
     public virtual void Enter()
     {
@@ -152,12 +157,14 @@ public class PlayerMoveState : IState
 
         return directionAngle;
     }
-
+    protected void SetBaseCamaraRecenterData()
+    {
+        stateMachine.ReusableData.backwardsCamaraRecenterData = movementData.backwardsCamaraRecenterData;
+        stateMachine.ReusableData.sideWaysCamaraRecenterData = movementData.sideWaysCamaraRecenterData;
+    }
     #endregion
 
     #region Reusable Area
-
-    
 
     protected void SetBaseRotationData()
     {
@@ -237,14 +244,29 @@ public class PlayerMoveState : IState
 
     protected virtual void AddInputActionCallBacks()
     {
+        //Switch entre caminar y correr. 
         stateMachine.Player.Input.PlayerActions.WalkToggle.started += OnWalkToggleStarted;
-        
+        // camara check para verificar rotacion de camara 
+        stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
+        // camara check para verificar moviento de la camara con el mouse
+        stateMachine.Player.Input.PlayerActions.Look.started += OnMousemovementStared;
+
+        stateMachine.Player.Input.PlayerActions.Movement.performed += OnMovementPerformed;
     }
+
+  
 
     protected virtual void RemoveInputActionCallBacks()
     {
+        //quit Switch entre caminar y correr. 
         stateMachine.Player.Input.PlayerActions.WalkToggle.started -= OnWalkToggleStarted;
-        
+        //quit camara check para verificar rotacion de camara 
+        stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled;
+        // quit camara check para verificar moviento de la camara con el mouse 
+        stateMachine.Player.Input.PlayerActions.Look.started -= OnMousemovementStared;
+
+        stateMachine.Player.Input.PlayerActions.Movement.performed -= OnMovementPerformed;
+
     }
 
     protected void DesacelerationOnHorizontal()
@@ -284,7 +306,73 @@ public class PlayerMoveState : IState
         stateMachine.Player.Rigidbody.velocity = playerHorizaontalVelocity;
         return playerHorizaontalVelocity;
     }
+    protected virtual void OnContactWithGround(Collider collider)
+    {
 
+    }
+
+    protected virtual void OnContactWithGroundExited(Collider collider)
+    {
+
+    }
+
+    protected void UpdateCamaraRecenteringState(Vector2 movementInput)
+    {
+        if (movementInput == Vector2.zero)
+        { 
+            return; 
+        }
+        
+        if (movementInput == Vector2.up)
+        {
+            DisableCamaraRecentering();
+            return;
+        }
+        float camaraVerticalAngle = stateMachine.Player.MainCamaraTransform.eulerAngles.x;
+        if (camaraVerticalAngle >= 270f)
+        {
+            camaraVerticalAngle -= 360f;
+        }
+
+        camaraVerticalAngle  = Mathf.Abs(camaraVerticalAngle);
+        if (movementInput == Vector2.down)
+        {
+            SetCamaraRecenterState(camaraVerticalAngle, stateMachine.ReusableData.backwardsCamaraRecenterData);
+            return;
+        }
+
+        SetCamaraRecenterState(camaraVerticalAngle, stateMachine.ReusableData.sideWaysCamaraRecenterData);
+    }
+   
+    protected void SetCamaraRecenterState(float camaraVerticalAngle, List<PlayerCamaraRecenterData> CamaraRecenterData)
+    {
+        foreach (PlayerCamaraRecenterData recenterData in CamaraRecenterData)
+        {
+            if (!recenterData.IsWithRange(camaraVerticalAngle))
+            {
+                continue;
+            }
+            EnableCamaraRecentering(recenterData.waitTime, recenterData.recenterTime);
+            return;
+        }
+        DisableCamaraRecentering();
+        return;
+    }
+
+    protected void EnableCamaraRecentering(float waitTime =-1f, float recenteringTime = -1f)
+    {
+        float movementSpeed = GetMovementSpeed();
+        if (movementSpeed ==0f)
+        {
+            movementSpeed = movementData.BaseSpeed;
+        }
+        stateMachine.Player.camaraUtility.EnableRecenterCamara(waitTime, recenteringTime, movementData.BaseSpeed, movementSpeed);
+    }
+
+    protected void DisableCamaraRecentering()
+    {
+        stateMachine.Player.camaraUtility.DisableRecenterCamara();
+    }
     #endregion
 
     #region Input Methods 
@@ -294,14 +382,18 @@ public class PlayerMoveState : IState
         // cada vez que agregamos un callback nesecitamos eliminarla
         Debug.Log("OnWalkToggle activado PlaYerMoveState ");
     }
-    protected virtual void OnContactWithGround(Collider collider)
+    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
     {
-
+        DisableCamaraRecentering();
+    }
+    private void OnMovementPerformed(InputAction.CallbackContext context)
+    {
+        UpdateCamaraRecenteringState(context.ReadValue<Vector2>());
     }
 
-    protected virtual void OnContactWithGroundExited(Collider collider)
+    private void OnMousemovementStared(InputAction.CallbackContext context)
     {
-
+        UpdateCamaraRecenteringState(stateMachine.ReusableData.MovementInput);
     }
     #endregion
 }

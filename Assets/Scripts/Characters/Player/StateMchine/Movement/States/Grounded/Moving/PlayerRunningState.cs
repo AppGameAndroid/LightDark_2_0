@@ -17,8 +17,10 @@ public class PlayerRunningState : PlayerMomentState
     #region Istate
     public override void Enter()
     {
-        base.Enter();
         stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
+
+        base.Enter();
+        
         
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.MediumForce;
         startTime = Time.time;
@@ -60,6 +62,8 @@ public class PlayerRunningState : PlayerMomentState
     protected override void OnMovementCanceled(InputAction.CallbackContext context)
     {
         stateMachine.ChangeState(stateMachine.midStoppingState);
+
+        base.OnMovementCanceled(context);
     }
     #endregion
 

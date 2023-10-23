@@ -10,9 +10,10 @@ public class PlayerLightLandingState : PlayerLandingState
 
     public override void Enter()
     {
+        stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
         base.Enter();
 
-        stateMachine.ReusableData.MovementSpeedModifier = 0f;
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.StationayForce;
 
         ResetVelocity();
