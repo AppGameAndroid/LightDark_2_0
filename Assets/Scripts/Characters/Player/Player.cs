@@ -12,8 +12,12 @@ public class Player : MonoBehaviour
     [field: Header("Collisions")]
     [field: SerializeField] public PlayerCapsuleColliderUtility ColliderUtility { get; private set; }
     [field: SerializeField] public PlayerLayerData LayerData { get; private set; }
+    
+    [field: Header("Camara")]
     [field: SerializeField] public PlayerCamaraUtility camaraUtility { get; private set; }
-
+    [field: Header("Animations")]
+    [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
+    public Animator Animator { get; private set; }
     public Rigidbody Rigidbody { get; private set; }
 
     public PlayerInput Input { get; private set; }
@@ -28,7 +32,10 @@ public class Player : MonoBehaviour
         ColliderUtility.Initialize(gameObject);
         ColliderUtility.CalculateCapsuleColliderDimentions();
         camaraUtility.Inicialaze();
-
+        
+        AnimationData.Initialize();
+        Animator= GetComponent<Animator>();
+        
         MainCamaraTransform = Camera.main.transform;
         MovementSTM = new PlayerMovementSTM(this);
     }
@@ -65,5 +72,37 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         MovementSTM.PhysicsUpdates();
+    }
+
+    public void OnMovementStateAnimationEnterEvent()
+    {
+        if (IsInAnimationTransition())
+        {
+            return;
+        }
+        MovementSTM.OnAnimationEnterEvent();
+    }
+
+    public void OnMovementStateAnimationTransitionEvent()
+    {
+        if (IsInAnimationTransition())
+        {
+            return;
+        }
+        MovementSTM.OnAnimationTransitionEvent();
+    }
+
+    public void OnMovementStateAnimationExitEvent()
+    {
+        if (IsInAnimationTransition())
+        {
+            return;
+        }
+        MovementSTM.OnAnimationExitEvent();
+    }
+
+    private bool IsInAnimationTransition (int layer =0)
+    {
+        return Animator.IsInTransition(layer);
     }
 }

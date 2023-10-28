@@ -22,10 +22,11 @@ public class PlayerDashState : PlayerGroundedState
         stateMachine.ReusableData.MovementSpeedModifier = movementData.DashData.SpeeedModifier;
 
         base.Enter();
-        
+        StartAnimation(stateMachine.Player.AnimationData.DashParameterHash);
         stateMachine.ReusableData.RotationData = dashData.RotationData;
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.StrongForce;
-        AddForceOnTransitionaryState();
+        
+        Dash();
 
         ShouldKeepRotatin = stateMachine.ReusableData.MovementInput != Vector2.zero;
         
@@ -59,6 +60,7 @@ public class PlayerDashState : PlayerGroundedState
     {
         base.Exit();
         SetBaseRotationData();
+        StopAnimation(stateMachine.Player.AnimationData.DashParameterHash);
     }
     #endregion
 
@@ -83,19 +85,22 @@ public class PlayerDashState : PlayerGroundedState
         return Time.time < startTime + dashData.TimeToBeConsideredConsecitive;
     }
 
-    private void AddForceOnTransitionaryState()
+    private void Dash()
     {
+        Vector3 DashDirection = stateMachine.Player.transform.forward;
+
+        DashDirection.y = 0f;
+
+        UpdateTargetRotation(DashDirection, false);
+
         if (stateMachine.ReusableData.MovementInput != Vector2.zero)
         {
-            return;
+            UpdateTargetRotation(GetMovementInputDirection());
+
+            DashDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
         }
-        Vector3 characterRotationDirection = stateMachine.Player.transform.forward;
-
-        characterRotationDirection.y = 0f;
-
-        UpdateTargetRotation(characterRotationDirection, false);
-
-        stateMachine.Player.Rigidbody.velocity = characterRotationDirection * GetMovementSpeed();
+        
+        stateMachine.Player.Rigidbody.velocity = DashDirection * GetMovementSpeed(false);
     }
     #endregion
 

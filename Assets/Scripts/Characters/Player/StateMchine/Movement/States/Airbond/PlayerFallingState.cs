@@ -17,6 +17,7 @@ public class PlayerFallingState : PlayerAirbondState
     public override void Enter()
     {
         base.Enter();
+        StartAnimation(stateMachine.Player.AnimationData.FallParameterHash);
         playerPositionEnter = stateMachine.Player.transform.position;
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
         ResetVerticalVelocity();
@@ -34,10 +35,15 @@ public class PlayerFallingState : PlayerAirbondState
     {
         // keep springting 
     }
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.FallParameterHash);
+    }
 
     protected override void OnContactWithGround(Collider collider)
     {
-        float fallDistance = Mathf.Abs(playerPositionEnter.y - stateMachine.Player.transform.position.y);
+        float fallDistance = playerPositionEnter.y - stateMachine.Player.transform.position.y;
         if (fallDistance < fallData.minDistanceHardFall)
         {
             stateMachine.ChangeState(stateMachine.lightLandingState);

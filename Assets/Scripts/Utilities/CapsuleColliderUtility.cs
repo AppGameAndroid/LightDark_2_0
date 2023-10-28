@@ -21,6 +21,11 @@ public class CapsuleColliderUtility
         capsuleColliderData.Initialize (gameObject);
 
     }
+
+    protected virtual void OnInitialize()
+    {
+
+    }
     public void CalculateCapsuleColliderDimentions()
     {
         SetCapsuleColliderRadius(defaultColliderData.Radius);

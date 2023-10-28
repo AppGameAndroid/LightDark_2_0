@@ -11,11 +11,17 @@ public class PlayerAirbondState : PlayerMoveState
     public override void Enter()
     {
         base.Enter();
-
+        StartAnimation(stateMachine.Player.AnimationData.AirborneParameterHash);
         ResetSpringState();
     }
+
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.AirborneParameterHash);
+    }
     #endregion
-        
+
     #region Reusable Methods 
 
     protected override void OnContactWithGround(Collider collider)

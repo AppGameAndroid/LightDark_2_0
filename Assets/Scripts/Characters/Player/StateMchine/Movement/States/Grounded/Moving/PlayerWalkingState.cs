@@ -20,12 +20,13 @@ public class PlayerWalkingState : PlayerMomentState
 
         stateMachine.ReusableData.backwardsCamaraRecenterData = WalkData.backwardsCamaraRecenterData;
         base.Enter();
-
+        StartAnimation(stateMachine.Player.AnimationData.WalkParameterHash);
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.WeakForce;
     }
     public override void Exit()
     {
         base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.WalkParameterHash);
         SetBaseCamaraRecenterData();
     }
     #endregion

@@ -15,6 +15,7 @@ public class PlayerGroundedState : PlayerMoveState
     public override void Enter()
     {
         base.Enter();
+        StartAnimation(stateMachine.Player.AnimationData.GroundParameterHash);
         UpdateShouldspringState();
         UpdateCamaraRecenteringState(stateMachine.ReusableData.MovementInput);
 
@@ -25,6 +26,12 @@ public class PlayerGroundedState : PlayerMoveState
         base.PhysicsUpdates();
 
         Float();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.GroundParameterHash);
     }
     #endregion
 
@@ -68,7 +75,7 @@ public class PlayerGroundedState : PlayerMoveState
 
         Vector3 groundColliderCenterInWorldSpace = groundCheckCollider.bounds.center;
 
-        Collider[] overlapGroundCollider = Physics.OverlapBox(groundColliderCenterInWorldSpace, groundCheckCollider.bounds.extents, groundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer,QueryTriggerInteraction.Ignore);
+        Collider[] overlapGroundCollider = Physics.OverlapBox(groundColliderCenterInWorldSpace, stateMachine.Player.ColliderUtility.TriggerData.GroundCheckExtends, groundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer,QueryTriggerInteraction.Ignore);
 
         return overlapGroundCollider.Length > 0;
     }
@@ -138,9 +145,6 @@ public class PlayerGroundedState : PlayerMoveState
     #endregion
 
     #region InputRegion
-
-
-
     protected virtual void OnDashStarted(InputAction.CallbackContext context)
     {
         stateMachine.ChangeState(stateMachine.dashState);

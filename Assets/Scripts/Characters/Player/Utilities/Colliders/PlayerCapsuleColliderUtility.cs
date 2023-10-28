@@ -7,4 +7,10 @@ using UnityEngine;
 public class PlayerCapsuleColliderUtility :CapsuleColliderUtility
 {
     [field: SerializeField] public PlayerTriggerColliderData TriggerData { get; private set; }
+
+    protected override void OnInitialize()
+    {
+        base.OnInitialize();
+        TriggerData.Initialize();
+    }
 }

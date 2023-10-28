@@ -70,6 +70,17 @@ MonoBehaviour:
       <TargetRotationReachTime>k__BackingField: {x: 0, y: 0.15, z: 0}
     <WalkData>k__BackingField:
       SpeedModifier: 0.225
+      <backwardsCamaraRecenterData>k__BackingField:
+      - <minAngle>k__BackingField: 80
+        <maxAngle>k__BackingField: 90
+        <waitTime>k__BackingField: -1
+        <recenterTime>k__BackingField: -1
+    <IdleData>k__BackingField:
+      <backwardsCamaraRecenterData>k__BackingField:
+      - <minAngle>k__BackingField: 80
+        <maxAngle>k__BackingField: 90
+        <waitTime>k__BackingField: 0.25
+        <recenterTime>k__BackingField: 0.5
     <RunData>k__BackingField:
       SpeedModifier: 1
     <DashData>k__BackingField:

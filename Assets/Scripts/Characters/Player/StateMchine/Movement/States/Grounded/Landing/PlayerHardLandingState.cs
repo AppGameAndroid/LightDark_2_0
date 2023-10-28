@@ -16,7 +16,7 @@ public class PlayerHardLandingState : PlayerLandingState
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
         base.Enter();
-
+        StartAnimation(stateMachine.Player.AnimationData.HardLandingParameterHash);
         stateMachine.Player.Input.PlayerActions.Movement.Disable();
         
         ResetVelocity();
@@ -30,6 +30,7 @@ public class PlayerHardLandingState : PlayerLandingState
     public override void Exit()
     {
         base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.HardLandingParameterHash);
         stateMachine.Player.Input.PlayerActions.Movement.Enable();
     }
     #endregion
@@ -54,7 +55,17 @@ public class PlayerHardLandingState : PlayerLandingState
         }
         stateMachine.ChangeState(stateMachine.runningState);
     }
-#endregion
+    public override void PhysicsUpdates()
+    {
+        //arreglo para evitar que fisicas hagan caer de golpe 
+        base.PhysicsUpdates();
+        if (!IsMovingHorizontaly())
+        {
+            return;
+        }
+        ResetVelocity();
+    }
+    #endregion
 
     #region Input Methods
     protected override void OnJumpStarted(InputAction.CallbackContext context)

@@ -16,7 +16,7 @@ public class PlayerRollingLandingState : PlayerLandingState
         stateMachine.ReusableData.MovementSpeedModifier = rollingData.speedModifier;
 
         base.Enter();
-
+        StartAnimation(stateMachine.Player.AnimationData.RollParameterHash);
         stateMachine.ReusableData.ShouldSpring = false;
     }
 
@@ -40,6 +40,12 @@ public class PlayerRollingLandingState : PlayerLandingState
             return;
         }
         OnMove();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.RollParameterHash);
     }
     #endregion
 

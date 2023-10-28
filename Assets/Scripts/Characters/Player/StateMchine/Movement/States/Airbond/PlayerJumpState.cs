@@ -61,6 +61,7 @@ public class PlayerJumpState : PlayerAirbondState
     {
         
         base.Exit();
+
         SetBaseRotationData();
         canStartFalling = false;
 
@@ -76,8 +77,11 @@ public class PlayerJumpState : PlayerAirbondState
 
         if (shouldKeepRotating)
         {
+            UpdateTargetRotation(GetMovementInputDirection());
+            
             jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
         }
+
         jumpForce.x *= jumpDirection.x;
         jumpForce.z *= jumpDirection.z;
 

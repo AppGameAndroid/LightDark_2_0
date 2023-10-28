@@ -12,8 +12,14 @@ public class PlayerMidStoppingState : PlayerStoppingState
     public override void Enter()
     {
         base.Enter();
+        StartAnimation(stateMachine.Player.AnimationData.MidStopParameterHash);
         stateMachine.ReusableData.MovementDesacelerationForce = movementData.StopData.MidtDecelerationForce;
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.MediumForce;
+    }
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.MidStopParameterHash);
     }
     #endregion
 }

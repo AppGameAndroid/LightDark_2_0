@@ -21,11 +21,12 @@ public class PlayerSprintState : PlayerMomentState
     {
         stateMachine.ReusableData.MovementSpeedModifier = springData.SpeedModifier;
         base.Enter();
+        StartAnimation(stateMachine.Player.AnimationData.SprintParameterHash);
+
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.StrongForce;
 
-        shouldResetSpring = true; 
-
         starTime = Time.time;
+
     }
 
     public override void Update()
@@ -36,7 +37,7 @@ public class PlayerSprintState : PlayerMomentState
         {
             return;
         }
-        if (Time.time > starTime + springData.SpeedToRunTime) 
+        if (Time.time < starTime + springData.SpeedToRunTime) 
         {
             return;
         }
@@ -46,6 +47,9 @@ public class PlayerSprintState : PlayerMomentState
     public override void Exit()
     {
         base.Exit();
+        Debug.Log("saliendo de sprintar");
+        StopAnimation(stateMachine.Player.AnimationData.SprintParameterHash);
+
         keepSprinting = false;
         if (shouldResetSpring)
         {
@@ -72,12 +76,17 @@ public class PlayerSprintState : PlayerMomentState
     #region Reusable Methods
     protected override void AddInputActionCallBacks()
     {
+        base.AddInputActionCallBacks();
         stateMachine.Player.Input.PlayerActions.Sprint.performed += OnsprintPerformance;
+      
+        
     }
 
     protected override void RemoveInputActionCallBacks()
     {
+        base.RemoveInputActionCallBacks();
         stateMachine.Player.Input.PlayerActions.Sprint.performed -= OnsprintPerformance;
+     
     }
 
     protected override void OnFall()
@@ -98,6 +107,7 @@ public class PlayerSprintState : PlayerMomentState
 
     protected override void OnMovementCanceled(InputAction.CallbackContext context)
     {
+        Debug.Log("cancelSprint");
         stateMachine.ChangeState(stateMachine.hardStoppingState);
         base.OnMovementCanceled(context);
     }
@@ -105,7 +115,7 @@ public class PlayerSprintState : PlayerMomentState
     protected override void OnJumpStarted(InputAction.CallbackContext context)
     {
         shouldResetSpring = false;
-        
+        base.OnJumpStarted(context);
     }
     #endregion
 }

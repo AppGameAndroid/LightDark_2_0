@@ -12,6 +12,7 @@ public class PlayerLightStoppingState : PlayerStoppingState
     public override void Enter()
     {
         base.Enter();
+
         stateMachine.ReusableData.MovementDesacelerationForce = movementData.StopData.LightDecelerationForce;
         stateMachine.ReusableData.CurrentJumpForce = airboneData.JumpData.WeakForce;
     }

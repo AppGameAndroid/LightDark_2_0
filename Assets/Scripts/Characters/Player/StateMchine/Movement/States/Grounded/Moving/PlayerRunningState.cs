@@ -18,7 +18,7 @@ public class PlayerRunningState : PlayerMomentState
     public override void Enter()
     {
         stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
-
+        StartAnimation(stateMachine.Player.AnimationData.RunParameterHash);
         base.Enter();
         
         
@@ -38,7 +38,12 @@ public class PlayerRunningState : PlayerMomentState
             return;
         }
         StopRunning();
+    }
 
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.RunParameterHash);
     }
     #endregion
 

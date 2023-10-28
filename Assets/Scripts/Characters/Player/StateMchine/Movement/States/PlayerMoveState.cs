@@ -176,9 +176,14 @@ public class PlayerMoveState : IState
         return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
     }
 
-    protected float GetMovementSpeed()
+    protected float GetMovementSpeed(bool shouldConsiderSlopes = true)
     {
-        return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier * stateMachine.ReusableData.MovementOnSlopeSpeedModify;
+        float movementSpeed = movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
+        if (shouldConsiderSlopes)
+        {
+            movementSpeed *= stateMachine.ReusableData.MovementOnSlopeSpeedModify;
+        }
+        return movementSpeed;
     }
 
     protected Vector3 GetPlayerHorizontalVelocity()
@@ -254,7 +259,14 @@ public class PlayerMoveState : IState
         stateMachine.Player.Input.PlayerActions.Movement.performed += OnMovementPerformed;
     }
 
-  
+   protected void StartAnimation(int animationHash)
+    {
+        stateMachine.Player.Animator.SetBool(animationHash, true);
+    }
+    protected void StopAnimation(int animationHash)
+    {
+        stateMachine.Player.Animator.SetBool(animationHash, false);
+    }
 
     protected virtual void RemoveInputActionCallBacks()
     {

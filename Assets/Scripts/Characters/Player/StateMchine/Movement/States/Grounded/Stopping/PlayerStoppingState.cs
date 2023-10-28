@@ -15,7 +15,9 @@ public class PlayerStoppingState : PlayerGroundedState
     {
         stateMachine.ReusableData.MovementSpeedModifier = 0f;
         SetBaseCamaraRecenterData();
-        base.Enter();        
+        base.Enter();
+
+        StartAnimation(stateMachine.Player.AnimationData.StopingParameterHash);
     }
 
     public override void PhysicsUpdates()
@@ -31,6 +33,11 @@ public class PlayerStoppingState : PlayerGroundedState
         DesacelerationOnHorizontal();
     }
 
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.StopingParameterHash);
+    }
     public override void OnAnimationTransitionEvent()
     {
         stateMachine.ChangeState(stateMachine.idleState);

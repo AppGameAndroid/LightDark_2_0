@@ -29,6 +29,16 @@ public class PlayerLightLandingState : PlayerLandingState
         }
         OnMove();
     }
+    public override void PhysicsUpdates()
+    {
+        //arreglo para evitar que fisicas hagan caer de golpe 
+        base.PhysicsUpdates();
+        if (!IsMovingHorizontaly())
+        {
+            return;
+        }
+        ResetVelocity();
+    }
     public override void OnAnimationTransitionEvent()
     {
         stateMachine.ChangeState(stateMachine.idleState);
